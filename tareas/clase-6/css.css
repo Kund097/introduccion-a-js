@@ -1,0 +1,22 @@
+*{
+    margin: 0px;
+    background-color:darkcyan;
+    color: aliceblue;
+    box-sizing: border-box;
+}
+
+input {
+    background-color: steelblue;
+}
+
+label {
+    background-color: steelblue;
+}
+
+#resultado {
+    display: none;
+}
+
+#calcular {
+    display: none;
+}
