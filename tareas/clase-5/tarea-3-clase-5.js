@@ -7,103 +7,120 @@
 // <strong> pre-creado el tiempo total de los videos.
 const $botonCrearInput = document.querySelector(`#agregar`);
 $botonCrearInput.onclick = function() {
-    crearInputHoras();
-    mostrarBotonCalcular();
+    crearInputsTiempo();
 }
 
 const $botonLimpiar = document.querySelector(`#limpiar`);
 $botonLimpiar.onclick = function() {
     limpiarElementos();
 }
+
+let segundos = 0;
+
 const $botonCalcular = document.querySelector('#calcular');
 $botonCalcular.onclick = function() {
-    const $textoResultado = document.querySelector("#resultado");
-    let resultado = 0;
-    resultado = calcularTotalHoras(calcularHoras(),calcularMinutos(),calcularSegundos());
-    $textoResultado.innerText = `El total de horas es: ${resultado}`;
+    obtenerSegundos();
+    calcularMinutosASegundos();
+    calcularHorasASegundos();
+    mostrarResultados();
 }
 
-
+function crearInputsTiempo() {
+    crearInputHoras();
+    creatInputsMinutos();
+    crearInputsSegundos();
+}
 
 function crearInputHoras() {
-    const TEXTO_HORAS = "Horas: ";
-    const TEXTO_MINUTOS = "Minutos: ";
-    const TEXTO_SEGUNDOS = "Segundos: ";
+    const $nodoPadre = document.querySelector('body');
+    const $divHoras = document.createElement('div')
+    const $labelHoras = document.createElement("label");
+    const $inputHoras = document.createElement("input");
 
-    for (let i = 0; i < 3; i++) {
-        const $nodoPadre = document.querySelector("body");
-        const $labelHoras = document.createElement("label");
-        const $inputHoras = document.createElement("input");
-        const $br = document.createElement("br");
-        
-        if (i === 0 ) {
-            
-            $labelHoras.innerText = TEXTO_HORAS;
-            $nodoPadre.appendChild($br);
-            $nodoPadre.appendChild($labelHoras);
-            $nodoPadre.appendChild($inputHoras);
-            $inputHoras.setAttribute("id","hora");
-            $inputHoras.setAttribute("class","horas");
-            $labelHoras.setAttribute("class","horas");
-            $br.setAttribute("class","horas");
-        } else if (i === 1) {
-            
-            $labelHoras.innerText = TEXTO_MINUTOS;
-            $nodoPadre.appendChild($labelHoras);
-            $nodoPadre.appendChild($inputHoras);
-            $inputHoras.setAttribute("id","minuto");
-            $inputHoras.setAttribute("class","horas");
-            $labelHoras.setAttribute("class","horas");
-        } else {
-            
-            $labelHoras.innerText = TEXTO_SEGUNDOS;
-            $nodoPadre.appendChild($labelHoras);
-            $nodoPadre.appendChild($inputHoras);
-            $inputHoras.setAttribute("id","segundo");
-            $inputHoras.setAttribute("class","horas");
-            $labelHoras.setAttribute("class","horas");
-        }
-    }
+    $nodoPadre.appendChild($divHoras);
+    $divHoras.appendChild($labelHoras);
+    $divHoras.appendChild($inputHoras);
+    $labelHoras.textContent = 'Horas: ';
+    $inputHoras.type = 'number';
+    $inputHoras.className = 'horas';
 }
+
+function creatInputsMinutos() {
+    const $nodoPadre = document.querySelector("body");
+    const $divMinutos = document.createElement('div');
+    const $labelMinutos = document.createElement("label");
+    const $inputMinutos = document.createElement("input");
+    
+    $nodoPadre.appendChild($divMinutos);
+    $divMinutos.appendChild($labelMinutos);
+    $divMinutos.appendChild($inputMinutos);
+    $labelMinutos.textContent = 'Minutos: ';
+    $inputMinutos.type = 'number';
+    $inputMinutos.className = 'minutos';
+}
+
+function crearInputsSegundos() {
+    const $nodoPadre = document.querySelector("body");
+    const $divSegundos = document.createElement('div');
+    const $labelSegundos = document.createElement("label");
+    const $inputSegundos = document.createElement("input");
+    
+    $nodoPadre.appendChild($divSegundos);
+    $divSegundos.appendChild($labelSegundos);
+    $divSegundos.appendChild($inputSegundos);
+    $labelSegundos.textContent = 'Segundos: ';
+    $inputSegundos.type = 'number';
+    $inputSegundos.className = 'segundos';
+}
+
 function limpiarElementos() {
     const $nodoPadre = document.querySelector("body");
     let $textoResultado = document.querySelector("#resultado");
-    const $elementosEliminados = document.querySelectorAll(".horas");
+    const $elementosEliminados = document.querySelectorAll("div");
     for (let i = 0; i < $elementosEliminados.length; i++) {
         $nodoPadre.removeChild($elementosEliminados[i]);
     }
     $textoResultado.innerText = "";
 }
 
-function mostrarBotonCalcular() {
+function calcularHorasASegundos() {
+    let totalHoras = 0;
+    let $hora = document.querySelectorAll('.horas');
+    for (let i = 0; i < $hora.length; i++) {
+        totalHoras += Number($hora[i].value);
+    }
+    segundos += totalHoras * 3600
+   
+}
+
+function calcularMinutosASegundos() {
+    let totalMinutos = 0;
+    const $minutos = document.querySelectorAll('.minutos');
+    for (let i = 0; i < $minutos.length; i++) {
+        totalMinutos += Number($minutos[i].value);
+    }
+    segundos += totalMinutos * 60;
     
 }
-function calcularHoras() {
-    let totalHoras = 0;
-    let $hora = document.querySelectorAll("#hora");
-    for (let i = 0; i < $hora.length; i++) {
-        totalHoras += Number(($hora[i]).value);
+
+function obtenerSegundos() {
+    const $segundos = document.querySelectorAll('.segundos');
+    for(let i = 0; i < $segundos.length; i++) {
+        segundos += Number($segundos[i].value);
     }
-    return totalHoras;
+
 }
-function calcularMinutos() {
-    let totalMinutos = 0;
-    let $minuto = document.querySelectorAll("#minuto");
-    for (let i = 0; i < $minuto.length; i++) {
-        totalMinutos += Number(($minuto[i]).value);
-    }
-    return totalMinutos / 60;
+
+function calcularTiempoTotal(segundos) {
+    let hora = (segundos / 3600).toFixed(0);
+    let minuto = ((segundos / 60) % 60).toFixed(0);
+    let segundo = segundos % 60;
+
+    return `${hora} horas ${minuto} minutos ${segundo} segundos`;
 }
-function calcularSegundos() {
-    let totalSegundos = 0;
-    let $segundo = document.querySelectorAll("#segundo");
-    for (let i = 0; i < $segundo.length; i++) {
-        totalSegundos += Number(($segundo[i]).value);
-    }
-    return totalSegundos / 3600;
-}
-function calcularTotalHoras(hora1,hora2,hora3) {
-    let totalHoras = 0; 
-    totalHoras = hora1 + hora2 + hora3
-    return totalHoras.toFixed(2);
+
+function mostrarResultados() {
+    let resultado = calcularTiempoTotal(segundos);
+    const $textoResultado = document.querySelector('#resultado');
+    $textoResultado.textContent = resultado;
 }

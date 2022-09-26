@@ -21,7 +21,7 @@ Ejemplo form:
 const $botonIngresarFormulario = document.querySelector('#ingresar');
 $botonIngresarFormulario.onclick = function() {
   let $nombreUsuario = document.querySelector('#nombre-usuario');
-  let $segundoNombreUsuario = document.querySelector('#nombre-usuario-2');
+  let $segundoNombreUsuario = document.querySelector('#segundo-nombre-usuario');
   let $apellidoUsuario = document.querySelector('#apellido-usuario');
   let $edadUsuario = document.querySelector('#edad-usuario');
   let $saludoTitulo = document.querySelector('h1');
