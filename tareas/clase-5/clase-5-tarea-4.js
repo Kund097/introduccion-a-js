@@ -10,58 +10,64 @@
 const $botonCalcular = document.querySelector('#calcular');
 
 $botonCalcular.onclick = function() {
-    mostrarTextoResultados(calcularPromedio(obtenerArray()),calcularMenor(obtenerArray()),calcularMayor(obtenerArray()),calcularMasFrecuente(obtenerArray())); 
+    obtenerArray();
+    mostrarTextoResultados('promedio',calcularPromedio(numerosObtenidos));
+    mostrarTextoResultados('menor',calcularMenor(numerosObtenidos));
+    mostrarTextoResultados('mayor',calcularMayor(numerosObtenidos));
+    mostrarTextoResultados('frecuente',calcularMasFrecuente(numerosObtenidos));
 }
-const ARRAY_NUEVO = [];
 
+
+let numerosObtenidos = [];
 function obtenerArray() {
-    const $obtenerLista = document.querySelectorAll('.numero');
-    for (let i = 0; i < $obtenerLista.length; i++) {
-        ARRAY_NUEVO.push(Number($obtenerLista[i].textContent));
+    const $numeros = document.querySelectorAll('.numero');
+    for (let i = 0; i < $numeros.length; i++) {
+        numerosObtenidos.push(Number($numeros[i].textContent));
     }
-    return (ARRAY_NUEVO);
+    return numerosObtenidos;
 }
 
-function calcularPromedio(array) {
+function calcularPromedio(numeros) {
     let resultadoPromedio;
     let sumaTotalArray = 0;
-    for (let i = 0; i < array.length; i++) {
-        sumaTotalArray += array[i];
+    for (let i = 0; i < numeros.length; i++) {
+        sumaTotalArray += numeros[i];
     }
-    return (`El promedio es: ${resultadoPromedio = sumaTotalArray / array.length}`);
+    resultadoPromedio = (sumaTotalArray / numeros.length).toFixed(2);
+    return resultadoPromedio;
 }
 
-function calcularMenor(array) {
-    let auxiliar = array[0];
+function calcularMenor(numeros) {
+    let auxiliar =numeros[0];
     let menor;
-    for (let i = 0; i < array.length; i++) {
-        if(auxiliar < array[i]) {
+    for (let i = 0; i < numeros.length; i++) {
+        if(auxiliar < numeros[i]) {
             menor = auxiliar;
         } else {
-            auxiliar = array[i];
-            menor = array[i];
+            auxiliar = numeros[i];
+            menor = numeros[i];
         }
     }
-    return (`el menor es: ${menor}`);
+    return menor;
 }
 
-function calcularMayor(array) {
-    let mayor = array[0];
-    for (let i = 0; i < array.length; i++) {
-        if(mayor < array[i]) {
-            mayor = array[i];
+function calcularMayor(numeros) {
+    let mayor = numeros[0];
+    for (let i = 0; i < numeros.length; i++) {
+        if(mayor < numeros[i]) {
+            mayor = numeros[i];
         } 
     }
-    return (`el mayor es: ${mayor}`);
+    return mayor;
 }
 
-function calcularMasFrecuente(array) {
+function calcularMasFrecuente(numeros) {
     let contadorRepetidos = 0;
-    let primerElemento = array[0];
+    let primerElemento = numeros[0];
     let posicionRepetido;
     let masFrecuente = 0;
-    for (let i = 0; i < array.length; i++) {
-        if (primerElemento === array[0]) {
+    for (let i = 0; i < numeros.length; i++) {
+        if (primerElemento === numeros[0]) {
             contadorRepetidos++
             posicionRepetido = i;
         }
@@ -73,16 +79,9 @@ function calcularMasFrecuente(array) {
         posicionMasrepetido = posicionRepetido;
     }
 
-    masFrecuente = array[posicionMasrepetido];
-    return (`el mas frecuente es: ${masFrecuente}`);
+    masFrecuente = numeros[posicionMasrepetido];
+    return masFrecuente;
 }
-function mostrarTextoResultados(promedio,menor,mayor,frecuente) {
-    let $textoPromedio = document.querySelector('#promedio');
-    let $textoMenor = document.querySelector('#menor');
-    let $textoMayor = document.querySelector('#mayor');
-    let $textoFrecuente = document.querySelector('#frecuente');
-    $textoPromedio.textContent = promedio;
-    $textoMenor.textContent = menor;
-    $textoMayor.textContent = mayor;
-    $textoFrecuente.textContent = frecuente;
+function mostrarTextoResultados(posicion,resultado) {
+    document.querySelector(`#${posicion}`).textContent = `El ${posicion} es: ${resultado}`
 }
