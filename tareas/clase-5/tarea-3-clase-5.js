@@ -7,31 +7,29 @@
 // <strong> pre-creado el tiempo total de los videos.
 const $botonCrearInput = document.querySelector(`#agregar`);
 $botonCrearInput.onclick = function() {
-    crearInputsTiempo();
+    crearInputTiempo('horas');
+    crearInputTiempo('minutos');
+    crearInputTiempo('segundos');
 }
 
 const $botonLimpiar = document.querySelector(`#limpiar`);
 $botonLimpiar.onclick = function() {
     limpiarElementos();
+    borrarResultadosAnteriores();
 }
 
 let segundos = 0;
 
 const $botonCalcular = document.querySelector('#calcular');
 $botonCalcular.onclick = function() {
+    borrarResultadosAnteriores();
     obtenerSegundos();
     calcularMinutosASegundos();
     calcularHorasASegundos();
     mostrarResultados();
 }
 
-function crearInputsTiempo() {
-    crearInputHoras();
-    creatInputsMinutos();
-    crearInputsSegundos();
-}
-
-function crearInputHoras() {
+function crearInputTiempo(tiempo) {
     const $nodoPadre = document.querySelector('body');
     const $divHoras = document.createElement('div')
     const $labelHoras = document.createElement("label");
@@ -40,43 +38,17 @@ function crearInputHoras() {
     $nodoPadre.appendChild($divHoras);
     $divHoras.appendChild($labelHoras);
     $divHoras.appendChild($inputHoras);
-    $labelHoras.textContent = 'Horas: ';
+
+    $labelHoras.textContent = `${tiempo[0].toUpperCase()+tiempo.substring(1)}: `;
     $inputHoras.type = 'number';
-    $inputHoras.className = 'horas';
-}
-
-function creatInputsMinutos() {
-    const $nodoPadre = document.querySelector("body");
-    const $divMinutos = document.createElement('div');
-    const $labelMinutos = document.createElement("label");
-    const $inputMinutos = document.createElement("input");
-    
-    $nodoPadre.appendChild($divMinutos);
-    $divMinutos.appendChild($labelMinutos);
-    $divMinutos.appendChild($inputMinutos);
-    $labelMinutos.textContent = 'Minutos: ';
-    $inputMinutos.type = 'number';
-    $inputMinutos.className = 'minutos';
-}
-
-function crearInputsSegundos() {
-    const $nodoPadre = document.querySelector("body");
-    const $divSegundos = document.createElement('div');
-    const $labelSegundos = document.createElement("label");
-    const $inputSegundos = document.createElement("input");
-    
-    $nodoPadre.appendChild($divSegundos);
-    $divSegundos.appendChild($labelSegundos);
-    $divSegundos.appendChild($inputSegundos);
-    $labelSegundos.textContent = 'Segundos: ';
-    $inputSegundos.type = 'number';
-    $inputSegundos.className = 'segundos';
+    $inputHoras.className = `${tiempo}`;
 }
 
 function limpiarElementos() {
     const $nodoPadre = document.querySelector("body");
     let $textoResultado = document.querySelector("#resultado");
     const $elementosEliminados = document.querySelectorAll("div");
+
     for (let i = 0; i < $elementosEliminados.length; i++) {
         $nodoPadre.removeChild($elementosEliminados[i]);
     }
@@ -86,6 +58,7 @@ function limpiarElementos() {
 function calcularHorasASegundos() {
     let totalHoras = 0;
     let $hora = document.querySelectorAll('.horas');
+
     for (let i = 0; i < $hora.length; i++) {
         totalHoras += Number($hora[i].value);
     }
@@ -96,6 +69,7 @@ function calcularHorasASegundos() {
 function calcularMinutosASegundos() {
     let totalMinutos = 0;
     const $minutos = document.querySelectorAll('.minutos');
+
     for (let i = 0; i < $minutos.length; i++) {
         totalMinutos += Number($minutos[i].value);
     }
@@ -105,6 +79,7 @@ function calcularMinutosASegundos() {
 
 function obtenerSegundos() {
     const $segundos = document.querySelectorAll('.segundos');
+
     for(let i = 0; i < $segundos.length; i++) {
         segundos += Number($segundos[i].value);
     }
@@ -112,15 +87,23 @@ function obtenerSegundos() {
 }
 
 function calcularTiempoTotal(segundos) {
-    let hora = (segundos / 3600).toFixed(0);
-    let minuto = ((segundos / 60) % 60).toFixed(0);
-    let segundo = segundos % 60;
 
-    return `${hora} horas ${minuto} minutos ${segundo} segundos`;
+    if (segundos !== 0) {
+
+        let hora = (segundos / 3600).toFixed(0);
+        let minuto = ((segundos / 60) % 60).toFixed(0);
+        let segundo = segundos % 60;
+
+        return `${hora} horas ${minuto} minutos ${segundo} segundos`;
+    }
 }
 
 function mostrarResultados() {
     let resultado = calcularTiempoTotal(segundos);
     const $textoResultado = document.querySelector('#resultado');
     $textoResultado.textContent = resultado;
+}
+
+function borrarResultadosAnteriores() {
+    segundos = 0;
 }
