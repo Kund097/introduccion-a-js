@@ -28,10 +28,11 @@ $botonLimpiarFormulario.onclick = function() {
 const $botonCalcular = document.querySelector('#calcular');
 
 $botonCalcular.onclick = function() {
+    borrarResultadosAnteriores();
     obtenerEdades();
-    calcularMayorEdad(obtenerEdades());
-    calcularMenorEdad(obtenerEdades());
-    calcularPromedioEdad(obtenerEdades());
+    textoResultados('mayor',calcularMayorEdad(edadesObtenidas));
+    textoResultados('menor',calcularMenorEdad(edadesObtenidas));
+    textoResultados('promedio',calcularPromedioEdad(edadesObtenidas));
     mostrarResultados(true);
 }
 
@@ -56,9 +57,9 @@ function crearElementos(familiares) {
     }
 }
 
-function mostrarBotonCalcular(trueOrFalse) {
+function mostrarBotonCalcular(verdaderoOFalso) {
     const $displayCalcular = document.querySelector('#calcular');
-    if (trueOrFalse) {
+    if (verdaderoOFalso) {
         $displayCalcular.style.display = "inline"
     } else {
         $displayCalcular.style.display = "none"
@@ -84,72 +85,76 @@ function detectarInputsABorrar() {
     }
 }
 
+let edadesObtenidas = [];
 function obtenerEdades() {
     const $edadesFamiliares = document.querySelectorAll('.edad');
-    const ARRAY_EDADES = [];
     for (let i = 0; i < $edadesFamiliares.length; i++) {
         if ($edadesFamiliares[i].value != 0) {
-            ARRAY_EDADES.push(Number($edadesFamiliares[i].value));
+            edadesObtenidas.push(Number($edadesFamiliares[i].value));
         } 
         
     }
-    return ARRAY_EDADES;
+    return edadesObtenidas;
 }
 
-function calcularMayorEdad(array) {
-    let mayor = array[0];
-    for (let i = 0; i < array.length; i++) {
-        if (mayor < array[i]) {
-            mayor = array[i]
-        } 
-    }
-    textoResultados(mayor,1);
-    return console.log(`El mayor es: ${mayor}`);
-}
-
-function calcularMenorEdad(array) {
-    let primerElemento = array[0];
-    let menor = 0;
-    for (let i = 0; i < array.length; i++) {
-        if (primerElemento < array[i]) {
-            menor = primerElemento;
-        } else {
-            menor = array[i];
-            primerElemento = array[i]
+function calcularMayorEdad(edades) {
+    let mayor = edades[0];
+    for (let i = 0; i < edades.length; i++) {
+        if (edades[i] > 0) {
+            if (mayor < edades[i]) {
+                mayor = edades[i]
+            } 
         }
     }
-    textoResultados(menor,2);
-    return console.log(`El menor es: ${menor}`);
+
+    return mayor
 }
 
-function calcularPromedioEdad(array) {
+function calcularMenorEdad(edades) {
+    let primerElemento = edades[0];
+    let menor = 0;
+    for (let i = 0; i < edades.length; i++) {
+        if (edades[i] > 0) {
+            if (primerElemento < edades[i]) {
+                menor = primerElemento;
+            } else {
+                menor = edades[i];
+                primerElemento = edades[i]
+            }
+        }
+    }
+
+    return  menor;
+}
+
+function calcularPromedioEdad(edades) {
     let promedio = 0;
     let sumaTotal = 0;
-    for (let i = 0; i < array.length; i++) {
-        sumaTotal += array[i];
+    let elementoEliminado = [];
+    for (let i = 0; i < edades.length; i++) {
+        if (edades[i] === 0) {
+            elementoEliminado = edades.splice(i,1);
+        }
+        sumaTotal += edades[i];
     }
-    promedio = (sumaTotal / array.length).toFixed(2);
-    textoResultados(promedio,3);
-    return console.log(`El promedio es: ${promedio}`);
+    promedio = (sumaTotal / edades.length).toFixed(2);
+
+    return promedio;
 }
 
-function textoResultados(resultado,texto) {
-    if (texto === 1) {
-        document.querySelector('#mayor').textContent = `El mayor es: ${resultado}`;
-    }
-    if (texto === 2) {
-        document.querySelector('#menor').textContent = `El menor es: ${resultado}`
-    }
-    if (texto === 3) {
-        document.querySelector('#promedio').textContent = `El promedio es: ${resultado}`
-    }
+function textoResultados(valor,resultado) {
+    document.querySelector(`#${valor}`).textContent = `El ${valor} es: ${resultado}`;
 }
 
-function mostrarResultados(trueOrFalse) {
+function mostrarResultados(verdaderoOFalso) {
     $resultados = document.querySelector('#resultado');
-    if (trueOrFalse) {
+    if (verdaderoOFalso) {
         $resultados.style.display = "inline"
     } else {
         $resultados.style.display = "none"
     }
+}
+
+function borrarResultadosAnteriores() {
+    edadesObtenidas = [];
 }
