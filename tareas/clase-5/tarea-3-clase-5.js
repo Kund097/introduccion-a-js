@@ -13,10 +13,6 @@ $botonCrearInput.onclick = function() {
     crearInputTiempo('minutos');
     crearInputTiempo('segundos');
 
-    crearInputTiempo('horas');
-    crearInputTiempo('minutos');
-    crearInputTiempo('segundos');
-
 }
 
 const $botonLimpiar = document.querySelector(`#limpiar`);
@@ -64,19 +60,9 @@ function crearInputTiempo(tiempo) {
 function adjuntarHijos(nodoDiv,nodoLabel,nodoInput) {
     const $nodoPadre = document.querySelector('body');
 
-
     $nodoPadre.appendChild(nodoDiv);
     nodoDiv.appendChild(nodoLabel);
     nodoDiv.appendChild(nodoInput);
-
-
-    $nodoPadre.appendChild($divHoras);
-    $divHoras.appendChild($labelHoras);
-    $divHoras.appendChild($inputHoras);
-
-    $labelHoras.textContent = `${tiempo[0].toUpperCase()+tiempo.substring(1)}: `;
-    $inputHoras.type = 'number';
-    $inputHoras.className = `${tiempo}`;
 
 }
 
@@ -141,21 +127,12 @@ function calcularTiempoTotal(segundos) {
 
     if (segundos !== 0) {
 
-
         let hora = Math.floor(segundos / 3600);
         let minuto = Math.floor((segundos / 60) % 60);
         let segundo = Math.floor(segundos % 60);
 
         return `${hora} horas ${minuto} minutos ${segundo} segundos`;
 
-    }
-
-
-        let hora = (segundos / 3600).toFixed(0);
-        let minuto = ((segundos / 60) % 60).toFixed(0);
-        let segundo = segundos % 60;
-
-        return `${hora} horas ${minuto} minutos ${segundo} segundos`;
     }
 
 }
