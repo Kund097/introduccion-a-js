@@ -13,6 +13,10 @@ $botonCrearInput.onclick = function() {
     crearInputTiempo('minutos');
     crearInputTiempo('segundos');
 
+    crearInputTiempo('horas');
+    crearInputTiempo('minutos');
+    crearInputTiempo('segundos');
+
 }
 
 const $botonLimpiar = document.querySelector(`#limpiar`);
@@ -36,13 +40,19 @@ $botonCalcular.onclick = function() {
     calcularHorasASegundos();
     mostrarResultados();
 
+
 }
 
 function crearInputTiempo(tiempo) {
 
+
+function crearInputTiempo(tiempo) {
+    const $nodoPadre = document.querySelector('body');
+
     const $divHoras = document.createElement('div')
     const $labelHoras = document.createElement("label");
     const $inputHoras = document.createElement("input");
+
 
     $labelHoras.textContent = `${tiempo[0].toUpperCase()+tiempo.substring(1)}: `;
     $inputHoras.type = 'number';
@@ -58,6 +68,15 @@ function adjuntarHijos(nodoDiv,nodoLabel,nodoInput) {
     $nodoPadre.appendChild(nodoDiv);
     nodoDiv.appendChild(nodoLabel);
     nodoDiv.appendChild(nodoInput);
+
+
+    $nodoPadre.appendChild($divHoras);
+    $divHoras.appendChild($labelHoras);
+    $divHoras.appendChild($inputHoras);
+
+    $labelHoras.textContent = `${tiempo[0].toUpperCase()+tiempo.substring(1)}: `;
+    $inputHoras.type = 'number';
+    $inputHoras.className = `${tiempo}`;
 
 }
 
@@ -122,12 +141,21 @@ function calcularTiempoTotal(segundos) {
 
     if (segundos !== 0) {
 
+
         let hora = Math.floor(segundos / 3600);
         let minuto = Math.floor((segundos / 60) % 60);
         let segundo = Math.floor(segundos % 60);
 
         return `${hora} horas ${minuto} minutos ${segundo} segundos`;
 
+    }
+
+
+        let hora = (segundos / 3600).toFixed(0);
+        let minuto = ((segundos / 60) % 60).toFixed(0);
+        let segundo = segundos % 60;
+
+        return `${hora} horas ${minuto} minutos ${segundo} segundos`;
     }
 
 }
@@ -144,4 +172,8 @@ function borrarResultadosAnteriores() {
 
     segundos = 0;
 
+}
+
+function borrarResultadosAnteriores() {
+    segundos = 0;
 }
